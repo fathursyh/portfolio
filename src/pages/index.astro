@@ -1,11 +1,31 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import AboutExperience from '@/components/react/about-experience';
+import FaqSection from '@/components/react/faq';
+import Footer from '@/components/react/footer';
+import Hero from '@/components/react/hero';
+import LatestArticles from '@/components/react/latest-articles';
+import Navbar from '@/components/react/navbar';
+import Testimonials from '@/components/react/testimonials';
 import Layout from '../layouts/Layout.astro';
+import { getImage } from 'astro:assets';
+import myImage from "../assets/formal-link.png";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+
+const optimizedAva = await getImage({
+  src: myImage,
+  format: "avif",
+  width: 72,
+});
 ---
 
 <Layout>
-	<Welcome />
+	<Navbar client:idle />
+	<main class="flex-1">
+		<Hero client:load ava={optimizedAva} />
+		<AboutExperience />
+		<LatestArticles />
+		<Testimonials client:visible />
+		<FaqSection client:visible />
+	</main>
+	<Footer />
 </Layout>

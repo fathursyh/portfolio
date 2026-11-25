@@ -1,23 +1,35 @@
+---
+import Seo, { type Props as SeoProps } from '@/components/seo.astro';
+import '../styles/global.css';
+
+interface Props extends SeoProps {}
+
+const seoProps = Astro.props;
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<Seo {...seoProps} />
+		<script is:inline>
+			(() => {
+				try {
+					const stored = localStorage.getItem('theme');
+					const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+					const useDark = stored ? stored === 'dark' : prefersDark || true;
+					document.documentElement.classList.toggle('dark', useDark);
+				} catch {
+					document.documentElement.classList.add('dark');
+				}
+			})();
+		</script>
 	</head>
 	<body>
-		<slot />
+		<div class="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 sm:border-x border-border pt-10 min-h-screen flex flex-col">
+			<slot />
+		</div>
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

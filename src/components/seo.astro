@@ -1,0 +1,197 @@
+---
+import { SEO, type Props as AstroSeoProps } from "astro-seo";
+
+/**
+ * Edit these defaults to update your site-wide SEO metadata.
+ * Any page can also override these via props passed to <Layout /> or <Seo />.
+ */
+export const SEO_DEFAULTS = {
+  siteName: "Fathursyah",
+  title: "Fathursyah | Software Engineer & Designer",
+  titleTemplate: "%s — Fathursyah",
+  titleDefault: "Fathursyah | Software Engineer & Designer",
+  description:
+    "Fathur's works in software engineering, cybersecurity, and project management.",
+  author: "Fathursyah",
+  keywords: [
+    "Fathursyah",
+    "Software Engineer",
+    "Portfolio",
+    "Project Manager",
+    "Cybersecurity",
+  ],
+  locale: "en_US",
+  type: "website" as "website" | "article" | "profile",
+  // Use a 1200x630 image in /public (e.g. "/og-image.png") or a full https:// URL
+  image:
+    "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&h=630&auto=format&fit=crop",
+  imageAlt: "Fathursyah — Software Engineer & Designer Portfolio",
+  imageWidth: 1200,
+  imageHeight: 630,
+  imageType: "image/jpeg",
+  twitterHandle: "@fathursyah",
+  twitterCard: "summary_large_image" as const,
+  themeColorLight: "#ffffff",
+  themeColorDark: "#0a0a0a",
+  robots: {
+    noindex: false,
+    nofollow: false,
+    noarchive: false,
+    nocache: false,
+    extras: "max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+  },
+};
+
+export interface Props {
+  title?: string;
+  useTitleTemplate?: boolean;
+  titleTemplate?: string;
+  description?: string;
+  canonical?: URL | string | null;
+  removeTrailingSlashForRoot?: boolean;
+  noindex?: boolean;
+  nofollow?: boolean;
+  noarchive?: boolean;
+  nocache?: boolean;
+  robotsExtras?: string;
+  type?: "website" | "article" | "profile";
+  image?: string;
+  imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  imageType?: string;
+  locale?: string;
+  localeAlternate?: string[];
+  twitterCard?: "summary" | "summary_large_image" | "app" | "player";
+  twitterCreator?: string;
+  twitterSite?: string;
+  keywords?: string[];
+  author?: string;
+  /** Optional article metadata (useful for blog post pages) */
+  article?: {
+    publishedTime?: string;
+    modifiedTime?: string;
+    expirationTime?: string;
+    authors?: string[];
+    section?: string;
+    tags?: string[];
+  };
+  languageAlternates?: AstroSeoProps["languageAlternates"];
+  extend?: AstroSeoProps["extend"];
+}
+
+const {
+  title,
+  useTitleTemplate = Boolean(title),
+  titleTemplate = SEO_DEFAULTS.titleTemplate,
+  description = SEO_DEFAULTS.description,
+  canonical,
+  removeTrailingSlashForRoot = true,
+  noindex = SEO_DEFAULTS.robots.noindex,
+  nofollow = SEO_DEFAULTS.robots.nofollow,
+  noarchive = SEO_DEFAULTS.robots.noarchive,
+  nocache = SEO_DEFAULTS.robots.nocache,
+  robotsExtras = SEO_DEFAULTS.robots.extras,
+  type = SEO_DEFAULTS.type,
+  image = SEO_DEFAULTS.image,
+  imageAlt = SEO_DEFAULTS.imageAlt,
+  imageWidth = SEO_DEFAULTS.imageWidth,
+  imageHeight = SEO_DEFAULTS.imageHeight,
+  imageType = SEO_DEFAULTS.imageType,
+  locale = SEO_DEFAULTS.locale,
+  localeAlternate,
+  twitterCard = SEO_DEFAULTS.twitterCard,
+  twitterCreator = SEO_DEFAULTS.twitterHandle,
+  twitterSite = SEO_DEFAULTS.twitterHandle,
+  keywords = SEO_DEFAULTS.keywords,
+  author = SEO_DEFAULTS.author,
+  article,
+  languageAlternates,
+  extend,
+} = Astro.props;
+
+const baseUrl = Astro.site ?? Astro.url;
+const resolvedImage = image.startsWith("http")
+  ? image
+  : new URL(image, baseUrl).href;
+
+const pageTitle = title ?? SEO_DEFAULTS.title;
+const resolvedOgTitle = title
+  ? `${title} — ${SEO_DEFAULTS.siteName}`
+  : SEO_DEFAULTS.title;
+
+const resolvedCanonical =
+  canonical === null
+    ? null
+    : canonical
+      ? new URL(canonical, baseUrl).href
+      : undefined;
+---
+<SEO
+  title={pageTitle}
+  titleTemplate={useTitleTemplate ? titleTemplate : undefined}
+  titleDefault={SEO_DEFAULTS.titleDefault}
+  description={description}
+  canonical={resolvedCanonical}
+  removeTrailingSlashForRoot={removeTrailingSlashForRoot}
+  noindex={noindex}
+  nofollow={nofollow}
+  noarchive={noarchive}
+  nocache={nocache}
+  robotsExtras={robotsExtras}
+  languageAlternates={languageAlternates}
+  openGraph={{
+    basic: {
+      title: resolvedOgTitle,
+      type: article ? "article" : type,
+      image: resolvedImage,
+      url: resolvedCanonical ?? Astro.url.href,
+    },
+    optional: {
+      description,
+      locale,
+      localeAlternate,
+      siteName: SEO_DEFAULTS.siteName,
+    },
+    image: {
+      alt: imageAlt,
+      width: imageWidth,
+      height: imageHeight,
+      type: imageType,
+    },
+    ...(article ? { article } : {}),
+  }}
+  twitter={{
+    card: twitterCard,
+    site: twitterSite,
+    creator: twitterCreator,
+    title: resolvedOgTitle,
+    description,
+    image: resolvedImage,
+    imageAlt,
+  }}
+  extend={{
+    link: [
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "icon", href: "/favicon.ico" },
+      ...(extend?.link ?? []),
+    ],
+    meta: [
+      ...(author ? [{ name: "author", content: author }] : []),
+      ...(keywords.length > 0
+        ? [{ name: "keywords", content: keywords.join(", ") }]
+        : []),
+      {
+        name: "theme-color",
+        content: SEO_DEFAULTS.themeColorLight,
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        name: "theme-color",
+        content: SEO_DEFAULTS.themeColorDark,
+        media: "(prefers-color-scheme: dark)",
+      },
+      ...(extend?.meta ?? []),
+    ],
+  }}
+/>
