@@ -468,7 +468,7 @@ export const portfolioData = {
           {
             question: "What services do you offer?",
             answer:
-              "I offer design system architecture, and full front-end development using React, Vue, and Angular.",
+              "I offer design system architecture, and full stack end-to-end development using NodeJS, and PHP.",
           },
           {
             question: "What is your design & build process like?",
@@ -494,7 +494,7 @@ export const portfolioData = {
           {
             question: "How long does a typical project take?",
             answer:
-              "A landing page or marketing site usually takes 1–3 weeks, while full web applications or comprehensive design systems range from 4-8 weeks.",
+              "A landing page or marketing site usually takes a month, while full web applications or comprehensive systems range from 3-6 months.",
           },
           {
             question: "When are you available to start?",
@@ -510,12 +510,17 @@ export const portfolioData = {
           {
             question: "What tech stack do you prefer?",
             answer:
-              "I specialize in typesafety frameworks such as Tanstack Start, and AdonisJS. No favorites, I choose stack based on the best tool for the job.",
+              "I prefer frameworks where type safety is the first class. No favorites, I choose stack based on the best tool for the job.",
           },
           {
             question: "Are you open to remote collaboration?",
             answer:
               "Absolutely. I collaborate asynchronously and across time zones with clients and engineering teams worldwide.",
+          },
+          {
+            question: "Why am I the most suitable for your team?",
+            answer:
+              "I catch things really fast, I spot weaknesses early, and I say no to unreachable goals. You will not regret it.",
           },
         ],
       },

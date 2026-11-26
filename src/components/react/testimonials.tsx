@@ -1,8 +1,71 @@
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { portfolioData } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+}
+
+function AuthorAvatar({ src, name }: { src?: string; name: string }) {
+  const imgRef = useRef<HTMLImageElement>(null);
+  const [status, setStatus] = useState<"loading" | "loaded" | "error">(
+    src ? "loading" : "error"
+  );
+
+  useEffect(() => {
+    if (!src) {
+      setStatus("error");
+      return;
+    }
+    const img = imgRef.current;
+    if (img?.complete) {
+      setStatus(img.naturalWidth > 0 ? "loaded" : "error");
+    } else {
+      setStatus("loading");
+    }
+  }, [src]);
+
+  return (
+    <div className="relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted ring-1 ring-border">
+      {status === "loading" && (
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 animate-pulse rounded-full bg-muted-foreground/20"
+        />
+      )}
+
+      {status === "error" ? (
+        <span
+          aria-label={name}
+          className="text-xs font-medium text-muted-foreground select-none"
+        >
+          {getInitials(name)}
+        </span>
+      ) : (
+        <img
+          ref={imgRef}
+          src={src}
+          alt={name}
+          referrerPolicy="no-referrer"
+          width={40}
+          height={40}
+          loading="lazy"
+          onLoad={() => setStatus("loaded")}
+          onError={() => setStatus("error")}
+          className={cn(
+            "size-full object-cover transition-opacity duration-200",
+            status === "loaded" ? "opacity-100" : "opacity-0"
+          )}
+        />
+      )}
+    </div>
+  );
+}
 
 export function Testimonials() {
   const { testimonials } = portfolioData;
@@ -55,16 +118,12 @@ export function Testimonials() {
             </blockquote>
 
             <div className="mt-8 flex items-center justify-center gap-3">
-              <img
+              <AuthorAvatar
+                key={current.author.avatar || current.author.name}
                 src={current.author.avatar}
-                alt={current.author.name}
-                width={40}
-                height={40}
-                loading="lazy"
-                className="size-10 rounded-full object-cover bg-muted ring-1 ring-border"
+                name={current.author.name}
               />
 
-              <slot />
               <div className="text-left">
                 <p className="text-sm font-medium text-foreground">
                   {current.author.name}

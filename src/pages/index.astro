@@ -16,7 +16,7 @@ import myImage from "../assets/formal-link.png";
 const optimizedAva = await getImage({
   src: myImage,
   format: "avif",
-  width: 72,
+  width: 150,
 });
 
 const featuredProjectImages: Record<string, GetImageResult> = Object.fromEntries(
@@ -40,7 +40,7 @@ const featuredProjectImages: Record<string, GetImageResult> = Object.fromEntries
 		<AboutExperience />
 		<Certificates />
 		<!-- <LatestArticles /> -->
-		<Testimonials client:visible />
+		<Testimonials client:idle />
 		<FaqSection client:visible />
 	</main>
 	<Footer />
