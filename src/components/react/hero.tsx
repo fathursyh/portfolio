@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { ArrowRight, Pause, Play } from "lucide-react";
 import {
   Marquee,
   MarqueeContent,
@@ -6,18 +8,46 @@ import {
 } from "@/components/kibo-ui/marquee";
 import { SocialIcon } from "@/components/react/social-icons";
 import { Button } from "@/components/ui/button";
-import { portfolioData } from "@/data/portfolio";
+import { portfolioData, type ProjectCategory } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
 import type { GetImageResult } from "astro";
 
-const Hero = ({ ava }: { ava: GetImageResult }) => {
-  const { profile, socials, gallery } = portfolioData;
+const categoryDotColor: Record<ProjectCategory, string> = {
+  "software-engineer": "bg-rose-400",
+  cybersecurity: "bg-emerald-400",
+  "project-manager": "bg-blue-400",
+};
+
+interface HeroProps {
+  ava: GetImageResult;
+  projectImages?: Record<string, GetImageResult>;
+}
+
+const Hero = ({ ava, projectImages }: HeroProps) => {
+  const { profile, socials, featuredProjects } = portfolioData;
   const { fetchpriority, ...avaAttributes } = ava.attributes;
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isFocusPaused, setIsFocusPaused] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mediaQuery.matches) {
+      setIsPlaying(false);
+    }
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsPlaying(!event.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
 
   return (
     <section
       id="top"
-      className="relative flex flex-col gap-14 sm:gap-20 py-16 sm:py-24 lg:py-28"
+      tabIndex={-1}
+      className="relative flex flex-col gap-14 sm:gap-20 py-16 sm:py-24 lg:py-28 focus-visible:outline-none"
     >
       <div className="text-center">
         {/* Profile Avatar */}
@@ -85,38 +115,130 @@ const Hero = ({ ava }: { ava: GetImageResult }) => {
         </div>
       </div>
 
-      {/* Tilted Photo Marquee */}
-      <div className="-mx-4 sm:-mx-6 lg:-mx-8">
-        <Marquee className="py-3">
-          <MarqueeFade
-            side="left"
-            className="pointer-events-none w-1/4 sm:w-1/3 from-background"
-          />
-          <MarqueeFade
-            side="right"
-            className="pointer-events-none w-1/4 sm:w-1/3 from-background"
-          />
-          <MarqueeContent pauseOnHover speed={35} autoFill>
-            {gallery.map((image, index) => (
-              <MarqueeItem
-                key={image.src}
-                className="mx-4 sm:mx-6 py-3"
-              >
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  width={234}
-                  height={234}
-                  loading="lazy"
-                  className={cn(
-                    "size-44 sm:size-58.5 rounded-lg aspect-square object-cover shadow-md border border-border/40 transition-transform duration-300 hover:scale-[1.03]",
-                    index % 2 === 0 ? "-rotate-2" : "rotate-2"
-                  )}
-                />
-              </MarqueeItem>
-            ))}
-          </MarqueeContent>
-        </Marquee>
+      {/* Featured Projects Marquee */}
+      <div className="flex flex-col gap-6">
+        <h2 className="sr-only">Featured Projects</h2>
+
+        <div
+          className="-mx-4 sm:-mx-6 lg:-mx-8"
+          onFocus={() => setIsFocusPaused(true)}
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) {
+              setIsFocusPaused(false);
+            }
+          }}
+        >
+          <Marquee className="py-5">
+            <MarqueeFade
+              side="left"
+              className="pointer-events-none w-14 sm:w-28 from-background"
+            />
+            <MarqueeFade
+              side="right"
+              className="pointer-events-none w-14 sm:w-28 from-background"
+            />
+            <MarqueeContent
+              play={isPlaying && !isFocusPaused}
+              pauseOnHover
+              speed={35}
+              autoFill
+            >
+              {featuredProjects.items.map((project, index) => {
+                const optimizedImage = projectImages?.[project.slug];
+                const { fetchpriority: _fp, ...imgAttributes } =
+                  optimizedImage?.attributes ?? {};
+
+                return (
+                  <MarqueeItem
+                    key={project.slug}
+                    className="mx-3.5 sm:mx-5 py-3"
+                  >
+                    <a
+                      href={project.href}
+                      className="group block rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+                    >
+                      <article
+                        className={cn(
+                          "relative w-56 sm:w-64 aspect-5/4 overflow-hidden rounded-xl border border-border/50 bg-muted shadow-md motion-safe:transition-transform motion-safe:duration-300 group-hover:scale-[1.03] group-hover:rotate-0 group-focus-visible:scale-[1.03] group-focus-visible:rotate-0",
+                          index % 2 === 0 ? "-rotate-2" : "rotate-2"
+                        )}
+                      >
+                        <img
+                          src={optimizedImage?.src ?? project.image.src.src}
+                          {...imgAttributes}
+                          alt={project.image.alt}
+                          width={imgAttributes.width ?? 256}
+                          height={imgAttributes.height ?? 205}
+                          loading="lazy"
+                          className="size-full aspect-5/4 object-cover motion-safe:transition-transform motion-safe:duration-500 group-hover:scale-105"
+                        />
+                        <div
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-0 bg-linear-to-t from-neutral-950/90 via-neutral-950/40 to-neutral-950/15"
+                        />
+                        <header className="absolute inset-0 flex flex-col justify-between p-3.5 text-left">
+                          <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-white/15 bg-neutral-950/75 px-2.5 py-0.5 text-[11px] font-medium text-neutral-100 backdrop-blur-md">
+                            <span
+                              aria-hidden="true"
+                              className={cn(
+                                "size-1.5 shrink-0 rounded-full",
+                                categoryDotColor[project.category]
+                              )}
+                            />
+                            {project.categoryLabel}
+                          </span>
+
+                          <div>
+                            <h3 className="text-sm font-semibold tracking-tight text-white line-clamp-1">
+                              {project.title}
+                            </h3>
+                            <p className="mt-0.5 text-xs text-neutral-200/90 line-clamp-1" title={project.tagline}>
+                              {project.tagline}
+                            </p>
+                          </div>
+                        </header>
+                      </article>
+                    </a>
+                  </MarqueeItem>
+                );
+              })}
+            </MarqueeContent>
+          </Marquee>
+        </div>
+
+        <div className="flex items-center justify-center gap-2">
+          <Button
+            asChild
+            variant="outline"
+            size="default"
+            className="group rounded-md px-4"
+          >
+            <a href={featuredProjects.cta.href}>
+              <span>{featuredProjects.cta.label}</span>
+              <ArrowRight
+                aria-hidden="true"
+                className="size-4 motion-safe:transition-transform motion-safe:duration-200 group-hover:translate-x-0.5"
+              />
+            </a>
+          </Button>
+
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsPlaying((prev) => !prev)}
+            aria-label={
+              isPlaying ? "Pause project marquee" : "Play project marquee"
+            }
+            className="rounded-md text-muted-foreground hover:text-foreground cursor-pointer"
+          >
+            {isPlaying ? (
+              <Pause className="size-4" aria-hidden="true" />
+            ) : (
+              <Play className="size-4" aria-hidden="true" />
+            )}
+          </Button>
+        </div>
       </div>
     </section>
   );

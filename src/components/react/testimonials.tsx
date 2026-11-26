@@ -23,7 +23,11 @@ export function Testimonials() {
   const current = testimonials[activeIndex];
 
   return (
-    <section id="testimonials" className="pb-20 sm:pb-28">
+    <section
+      id="testimonials"
+      tabIndex={-1}
+      className="pb-20 sm:pb-28 focus-visible:outline-none"
+    >
       <div
         role="region"
         aria-roledescription="carousel"

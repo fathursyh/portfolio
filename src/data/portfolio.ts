@@ -1,3 +1,9 @@
+import type { ImageMetadata } from "astro";
+import { withBase } from "@/lib/utils";
+import sakalaImg from "@/assets/projects/software/sakala.png";
+import pmImg from "@/assets/projects/pm/event-ghp.jpg";
+import cyberImg from "@/assets/projects/cyber/iso.jpg";
+
 export interface NavLink {
   label: string;
   href: string;
@@ -9,9 +15,22 @@ export interface SocialLink {
   href: string;
 }
 
-export interface GalleryImage {
-  src: string;
-  alt: string;
+export type ProjectCategory =
+  | "software-engineer"
+  | "cybersecurity"
+  | "project-manager";
+
+export interface FeaturedProject {
+  slug: string;
+  title: string;
+  tagline: string;
+  category: ProjectCategory;
+  categoryLabel: string;
+  image: {
+    src: ImageMetadata;
+    alt: string;
+  };
+  href: string;
 }
 
 export interface ExperienceItem {
@@ -89,32 +108,50 @@ export const portfolioData = {
     },
   ] satisfies SocialLink[],
 
-  gallery: [
-    {
-      src: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=640&auto=format&fit=crop",
-      alt: "Workspace code preview",
+  featuredProjects: {
+    cta: {
+      label: "More Projects",
+      href: withBase("/projects"),
     },
-    {
-      src: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=640&auto=format&fit=crop",
-      alt: "Interface design mockup",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=640&auto=format&fit=crop",
-      alt: "Laptop on minimal desk",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=640&auto=format&fit=crop",
-      alt: "Color palette and branding exploration",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=640&auto=format&fit=crop",
-      alt: "Front-end engineering setup",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=640&auto=format&fit=crop",
-      alt: "Design system wireframe sketches",
-    },
-  ] satisfies GalleryImage[],
+    items: [
+      {
+        slug: "sakala-mrv",
+        title: "Sakala MRV",
+        tagline: "End-to-end type-safe full-stack architecture",
+        category: "software-engineer",
+        categoryLabel: "Software Engineer",
+        image: {
+          src: sakalaImg,
+          alt: "Sakala MRV software engineering project preview",
+        },
+        href: withBase("/projects#software-engineer"),
+      },
+      {
+        slug: "iso-27001",
+        title: "Software ISO 27001 Audit",
+        tagline: "Automated hardening & vulnerability checks",
+        category: "cybersecurity",
+        categoryLabel: "Cybersecurity",
+        image: {
+          src: cyberImg,
+          alt: "Software ISO 27001 audit",
+        },
+        href: withBase("/projects#cybersecurity"),
+      },
+      {
+        slug: "eventspace-ticketing",
+        title: "EventSpace Ticketing",
+        tagline: "Agile, cross-functional roadmap & milestone launch",
+        category: "project-manager",
+        categoryLabel: "Project Manager",
+        image: {
+          src: pmImg,
+          alt: "EventSpace Ticketing project management preview",
+        },
+        href: withBase("/projects#project-manager"),
+      },
+    ] satisfies FeaturedProject[],
+  },
 
   about: {
     title: "About Me",
@@ -196,7 +233,7 @@ export const portfolioData = {
     },
     {
       quote:
-        "Bringing them onto our startup was one of our best decisions. A rapid adaptation to the system, and meaningful contributions to every stage of development.",
+        "Bringing them onto the team was one of our best decisions. A rapid adaptation to the system, software fundamentals, and meaningful contributions to every stage of development.",
       author: {
         name: "Iqbal Zulfikar",
         role: "IT Specialist at PT. Merdeka Sejahtera Persada",

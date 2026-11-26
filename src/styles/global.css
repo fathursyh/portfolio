@@ -138,3 +138,12 @@
     @apply bg-background text-foreground antialiased;
   }
 }
+
+.nav-scrollspy {
+  scroll-target-group: auto;
+}
+
+.nav-scrollspy a:is(:target-current, .target-current) {
+  color: var(--foreground);
+  background-color: color-mix(in oklch, var(--accent) 80%, transparent);
+}

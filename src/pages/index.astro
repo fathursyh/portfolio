@@ -8,6 +8,8 @@ import Navbar from '@/components/react/navbar';
 import Testimonials from '@/components/react/testimonials';
 import Layout from '../layouts/Layout.astro';
 import { getImage } from 'astro:assets';
+import type { GetImageResult } from 'astro';
+import { portfolioData } from '@/data/portfolio';
 import myImage from "../assets/formal-link.png";
 
 const optimizedAva = await getImage({
@@ -15,12 +17,25 @@ const optimizedAva = await getImage({
   format: "avif",
   width: 72,
 });
+
+const featuredProjectImages: Record<string, GetImageResult> = Object.fromEntries(
+  await Promise.all(
+    portfolioData.featuredProjects.items.map(async (project) => [
+      project.slug,
+      await getImage({
+        src: project.image.src,
+        format: "avif",
+        width: 512,
+      }),
+    ])
+  )
+);
 ---
 
 <Layout>
 	<Navbar client:idle />
 	<main class="flex-1">
-		<Hero client:load ava={optimizedAva} />
+		<Hero client:load ava={optimizedAva} projectImages={featuredProjectImages} />
 		<AboutExperience />
 		<LatestArticles />
 		<Testimonials client:visible />

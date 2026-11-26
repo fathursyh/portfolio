@@ -1,10 +1,7 @@
 ---
 import { SEO, type Props as AstroSeoProps } from "astro-seo";
+import { withBase } from "@/lib/utils";
 
-/**
- * Edit these defaults to update your site-wide SEO metadata.
- * Any page can also override these via props passed to <Layout /> or <Seo />.
- */
 export const SEO_DEFAULTS = {
   siteName: "Fathursyah",
   title: "Fathursyah | Software Engineer & Designer",
@@ -22,9 +19,7 @@ export const SEO_DEFAULTS = {
   ],
   locale: "en_US",
   type: "website" as "website" | "article" | "profile",
-  // Use a 1200x630 image in /public (e.g. "/og-image.png") or a full https:// URL
-  image:
-    "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&h=630&auto=format&fit=crop",
+  image: "/portf.jpg",
   imageAlt: "Fathursyah — Software Engineer & Designer Portfolio",
   imageWidth: 1200,
   imageHeight: 630,
@@ -113,7 +108,7 @@ const {
 const baseUrl = Astro.site ?? Astro.url;
 const resolvedImage = image.startsWith("http")
   ? image
-  : new URL(image, baseUrl).href;
+  : new URL(withBase(image), baseUrl).href;
 
 const pageTitle = title ?? SEO_DEFAULTS.title;
 const resolvedOgTitle = title
@@ -172,8 +167,8 @@ const resolvedCanonical =
   }}
   extend={{
     link: [
-      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
-      { rel: "icon", href: "/favicon.ico" },
+      { rel: "icon", type: "image/svg+xml", href: withBase("/favicon.svg") },
+      { rel: "icon", href: withBase("/favicon.ico") },
       ...(extend?.link ?? []),
     ],
     meta: [

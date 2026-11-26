@@ -21,7 +21,11 @@ export function FaqSection() {
   };
 
   return (
-    <section id="faq" className="pb-16 sm:pb-24">
+    <section
+      id="faq"
+      tabIndex={-1}
+      className="pb-16 sm:pb-24 focus-visible:outline-none"
+    >
       <div className="mb-6">
         <h2 className="text-xl lg:text-2xl font-medium tracking-tight text-foreground">
           {faq.title}

@@ -7,6 +7,8 @@ import playformCompress from '@playform/compress';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://fathursyh.github.io',
+  base: '/portfolio',
   output: 'static',
   integrations: [react({
     experimentalReactChildren: true,

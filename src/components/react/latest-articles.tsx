@@ -5,7 +5,11 @@ export function LatestArticles() {
   const { articles } = portfolioData;
 
   return (
-    <section id="articles" className="pb-16 sm:pb-24">
+    <section
+      id="articles"
+      tabIndex={-1}
+      className="pb-16 sm:pb-24 focus-visible:outline-none"
+    >
       <div className="mb-8">
         <h2 className="text-xl lg:text-2xl font-medium tracking-tight text-foreground">
           {articles.title}

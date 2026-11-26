@@ -6,7 +6,8 @@ export function AboutExperience() {
   return (
     <section
       id="about"
-      className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-10 pb-16 sm:pb-24"
+      tabIndex={-1}
+      className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-10 pb-16 sm:pb-24 focus-visible:outline-none"
     >
       {/* About Me */}
       <div>

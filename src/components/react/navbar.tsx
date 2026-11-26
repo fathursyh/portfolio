@@ -1,16 +1,84 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { portfolioData } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
   const [activeHref, setActiveHref] = useState("#top");
+  const [usesNativeScrollspy, setUsesNativeScrollspy] = useState(false);
   const [isDark, setIsDark] = useState(true);
+  const navListRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains("dark"));
+  }, []);
+
+  useEffect(() => {
+    const navLinks = portfolioData.navLinks;
+
+    if (CSS.supports("scroll-target-group: auto")) {
+      setUsesNativeScrollspy(true);
+
+      const syncAriaCurrent = () => {
+        const currentLink = navListRef.current?.querySelector<HTMLAnchorElement>(
+          "a:target-current"
+        );
+        const href = currentLink?.getAttribute("href");
+        if (href) {
+          setActiveHref(href);
+        }
+      };
+
+      syncAriaCurrent();
+      document.addEventListener("scrollend", syncAriaCurrent);
+      window.addEventListener("hashchange", syncAriaCurrent);
+
+      return () => {
+        document.removeEventListener("scrollend", syncAriaCurrent);
+        window.removeEventListener("hashchange", syncAriaCurrent);
+      };
+    }
+
+    const sections = navLinks
+      .map((link) => document.querySelector<HTMLElement>(link.href))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveHref(`#${entry.target.id}`);
+          }
+        }
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
+    );
+
+    for (const section of sections) {
+      observer.observe(section);
+    }
+
+    const handleBoundaryScroll = () => {
+      if (window.scrollY <= 16) {
+        setActiveHref(navLinks[0].href);
+      } else if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 16
+      ) {
+        setActiveHref(navLinks[navLinks.length - 1].href);
+      }
+    };
+
+    window.addEventListener("scroll", handleBoundaryScroll, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", handleBoundaryScroll);
+    };
   }, []);
 
   const toggleTheme = () => {
@@ -30,16 +98,18 @@ export function Navbar() {
         aria-label="Primary navigation"
         className="flex items-center gap-1 bg-background/80 dark:bg-muted/80 backdrop-blur-md rounded-full px-2 sm:px-3.5 py-1.5 border border-border/70 shadow-lg shadow-neutral-950/5"
       >
-        <ul className="flex items-center">
+        <ul ref={navListRef} className="nav-scrollspy flex items-center">
           {portfolioData.navLinks.map((link) => {
             const isActive = activeHref === link.href;
             return (
               <li key={link.href}>
                 <a
                   href={link.href}
+                  aria-current={isActive ? "true" : undefined}
                   onClick={() => setActiveHref(link.href)}
                   className={cn(
                     "inline-flex items-center rounded-full px-2.5 sm:px-3 py-1 text-xs sm:text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                    isActive && !usesNativeScrollspy && "target-current",
                     isActive
                       ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground"
