@@ -121,6 +121,7 @@ export const portfolioData = {
     paragraphs: [
       "As a software engineer, I focus on building fast, accessible, and visually refined web applications that balance aesthetic clarity with practical usability.",
       "My approach blends boring yet structured workflow of developing software and cleverly securing the system from inside and out.",
+      "I also maintain a strong, active interest in Cybersecurity, ensuring that the applications I architect and manage aren't just highly functional, but resilient and secure by design.",
     ],
   },
 
@@ -131,21 +132,21 @@ export const portfolioData = {
         period: "2026 - Present",
         role: "Project Manager at",
         company: "EventSpace",
-        url: "https://example.com",
+        url: "#",
         accentColor: "#10b981",
       },
       {
         period: "2025 - Present",
         role: "Software Engineer at",
         company: "Dassa Corp.",
-        url: "https://example.com",
+        url: "https://dassacorp.com/team/fathursyah-awandanu",
         accentColor: "#f43f5e",
       },
       {
         period: "2024-2025",
         role: "Software Engineer at",
         company: "iGIS Lab Pakuan",
-        url: "https://example.com",
+        url: "https://www.google.com/search?q=igis+lab+pakuan",
         accentColor: "#6366f1",
       },
     ] satisfies ExperienceItem[],
@@ -185,32 +186,32 @@ export const portfolioData = {
   testimonials: [
     {
       quote:
-        "Working together completely transformed our product. There is a rare balance of sharp visual aesthetics and functional simplicity—our redesign looked better and noticeably improved conversion across key flows.",
+        "Working together completely transformed our product. I learned a lot from him about frontend visually, and performance wise. A great partner to exchange knowledge in this line of work.",
       author: {
         name: "Naufal Alwi Pratama",
-        role: "Mobile Developer at Bloom Finance",
+        role: "Mobile Developer at PT. Sumber Global Wahana",
         avatar:
-          "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=facearea&facepad=2&w=96&h=96&q=80",
+          "https://media.licdn.com/dms/image/v2/D5603AQFqqrW2g5thpg/profile-displayphoto-scale_200_200/B56Z3IJNPjIQAc-/0/1777179352624?e=2147483647&v=beta&t=Mug2nE7ojgb52eZ8LsMbTAvr_RPoB5DjhYK4fKP8kAo",
       },
     },
     {
       quote:
-        "Bringing them onto our startup was one of our best decisions. Instead of only delivering static mockups, they challenged assumptions, prototyped interactions quickly, and made engineering handoff seamless.",
+        "Bringing them onto our startup was one of our best decisions. A rapid adaptation to the system, and meaningful contributions to every stage of development.",
       author: {
         name: "Iqbal Zulfikar",
-        role: "IT Specialist at Dassa Corp",
+        role: "IT Specialist at PT. Merdeka Sejahtera Persada",
         avatar:
-          "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=96&h=96&q=80",
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRThs-HXbmbFtJLFSRkKHVD0wzv5S7AtBDD6YhFHN6nFw&s=10",
       },
     },
     {
       quote:
-        "They stand out in translating complex product requirements into intuitive interfaces. Every milestone was delivered with both creative polish and analytical rigor.",
+        "They stand out in translating complex product requirements into strong systems. Every milestone was delivered with both creative polish and analytical rigor.",
       author: {
         name: "Leo Wibowo",
-        role: "Deputy Head of Technical",
+        role: "Deputy Head of Technical at PT. Merdeka Sejahtera Persada",
         avatar:
-          "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=facearea&facepad=2&w=96&h=96&q=80",
+          "https://dassacorp.com/wp-content/uploads/2025/03/Leo-Wibowo-S-N.webp",
       },
     },
   ] satisfies TestimonialItem[],

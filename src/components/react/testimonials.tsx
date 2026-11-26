@@ -59,6 +59,8 @@ export function Testimonials() {
                 loading="lazy"
                 className="size-10 rounded-full object-cover bg-muted ring-1 ring-border"
               />
+
+              <slot />
               <div className="text-left">
                 <p className="text-sm font-medium text-foreground">
                   {current.author.name}

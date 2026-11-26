@@ -12,6 +12,7 @@ import type { GetImageResult } from "astro";
 
 const Hero = ({ ava }: { ava: GetImageResult }) => {
   const { profile, socials, gallery } = portfolioData;
+  const { fetchpriority, ...avaAttributes } = ava.attributes;
 
   return (
     <section
@@ -25,12 +26,12 @@ const Hero = ({ ava }: { ava: GetImageResult }) => {
             <img
               className="size-full object-cover"
               src={ava.src}
-              {...ava.attributes}
+              {...avaAttributes}
               alt="Fathursyah Avatar"
               loading="eager"
               width={72}
               height={72}
-              decoding="auto"
+              fetchPriority={fetchpriority ?? "high"}
             />
           </span>
         </div>
