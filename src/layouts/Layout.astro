@@ -8,7 +8,7 @@ const seoProps = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -18,11 +18,10 @@ const seoProps = Astro.props;
 			(() => {
 				try {
 					const stored = localStorage.getItem('theme');
-					const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-					const useDark = stored ? stored === 'dark' : prefersDark || true;
+					const useDark = stored === 'dark';
 					document.documentElement.classList.toggle('dark', useDark);
 				} catch {
-					document.documentElement.classList.add('dark');
+					document.documentElement.classList.remove('dark');
 				}
 			})();
 		</script>

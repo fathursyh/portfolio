@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 export function Navbar() {
   const [activeHref, setActiveHref] = useState("#top");
   const [usesNativeScrollspy, setUsesNativeScrollspy] = useState(false);
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
   const navListRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
