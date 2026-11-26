@@ -1,0 +1,82 @@
+---
+import { Image } from "astro:assets";
+import { portfolioData } from "@/data/portfolio";
+
+const { certificates } = portfolioData;
+---
+
+<section
+  id="certificates"
+  tabindex="-1"
+  class="pb-16 sm:pb-24 focus-visible:outline-none"
+>
+  <div class="mb-6">
+    <h2 class="text-xl lg:text-2xl font-medium tracking-tight text-foreground">
+      {certificates.title}
+    </h2>
+    <p class="mt-2 text-sm text-muted-foreground">
+      {certificates.description}
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    {
+      certificates.items.map((cert) => (
+        <article class="group flex flex-col overflow-hidden rounded-xl border border-border/60 bg-muted/30 transition-colors hover:border-border">
+          <Image
+            src={cert.image.src}
+            alt={cert.image.alt}
+            width={640}
+            format="avif"
+            loading="lazy"
+            class="w-full aspect-[4/3] object-cover border-b border-border/50 bg-muted"
+          />
+
+          <div class="flex flex-1 flex-col p-4 sm:p-5">
+            <header class="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-background px-2.5 py-0.5 font-medium text-foreground">
+                <span
+                  aria-hidden="true"
+                  class="size-1.5 rounded-full bg-violet-500"
+                />
+                {cert.issuer}
+              </span>
+              <span class="tabular-nums">{cert.date}</span>
+            </header>
+
+            <h3 class="mt-3 text-base font-semibold tracking-tight text-foreground text-pretty">
+              {cert.title}
+            </h3>
+
+            <p class="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+              {cert.summary}
+            </p>
+
+            <div class="mt-4 flex flex-wrap gap-1.5">
+              {cert.skills.map((skill) => (
+                <span class="rounded-md bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                  {skill}
+                </span>
+              ))}
+            </div>
+
+            {cert.credentialUrl && (
+              <footer class="mt-auto pt-4">
+                <a
+                  href={cert.credentialUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1 text-xs font-medium text-foreground underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-xs"
+                >
+                  View credential
+                  <span class="sr-only"> for {cert.title}</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              </footer>
+            )}
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>

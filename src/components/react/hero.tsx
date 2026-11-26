@@ -7,6 +7,7 @@ import {
   MarqueeItem,
 } from "@/components/kibo-ui/marquee";
 import { SocialIcon } from "@/components/react/social-icons";
+import { TechStackBackground } from "@/components/react/tech-stack-background";
 import { Button } from "@/components/ui/button";
 import { portfolioData, type ProjectCategory } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
@@ -49,8 +50,11 @@ const Hero = ({ ava, projectImages }: HeroProps) => {
       tabIndex={-1}
       className="relative flex flex-col gap-14 sm:gap-20 py-16 sm:py-24 lg:py-28 focus-visible:outline-none"
     >
-      <div className="text-center">
-        {/* Profile Avatar */}
+      <div className="relative text-center py-4 sm:py-6">
+        <TechStackBackground />
+
+        <div className="relative z-10">
+          {/* Profile Avatar */}
         <div className="mb-5 flex items-center justify-center">
           <span className="inline-flex size-18 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted ring ring-border ring-offset-3 ring-offset-background">
             <img
@@ -112,6 +116,7 @@ const Hero = ({ ava, projectImages }: HeroProps) => {
               </a>
             ))}
           </div>
+        </div>
         </div>
       </div>
 

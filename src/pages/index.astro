@@ -1,5 +1,6 @@
 ---
 import AboutExperience from '@/components/react/about-experience';
+import Certificates from '@/components/certificates.astro';
 import FaqSection from '@/components/react/faq';
 import Footer from '@/components/react/footer';
 import Hero from '@/components/react/hero';
@@ -37,6 +38,7 @@ const featuredProjectImages: Record<string, GetImageResult> = Object.fromEntries
 	<main class="flex-1">
 		<Hero client:load ava={optimizedAva} projectImages={featuredProjectImages} />
 		<AboutExperience />
+		<Certificates />
 		<!-- <LatestArticles /> -->
 		<Testimonials client:visible />
 		<FaqSection client:visible />

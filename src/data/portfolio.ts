@@ -1,8 +1,13 @@
 import type { ImageMetadata } from "astro";
 import { withBase } from "@/lib/utils";
 import sakalaImg from "@/assets/projects/software/sakala.png";
+import fahpImg from "@/assets/projects/software/f-ahp.png";
+import financeImg from "@/assets/projects/software/finance.jpg";
 import pmImg from "@/assets/projects/pm/event-ghp.jpg";
 import cyberImg from "@/assets/projects/cyber/iso.jpg";
+import vueCert from "@/assets/certificates/vue-certificate.jpg";
+import reactCert from "@/assets/certificates/react-certificate.jpg";
+import ibmCert from "@/assets/certificates/ibm-certificate.jpg";
 
 export interface NavLink {
   label: string;
@@ -31,6 +36,37 @@ export interface FeaturedProject {
     alt: string;
   };
   href: string;
+}
+
+export interface ProjectItem {
+  slug: string;
+  title: string;
+  tagline: string;
+  description: string;
+  category: ProjectCategory;
+  categoryLabel: string;
+  period: string;
+  tags: string[];
+  image: {
+    src: ImageMetadata;
+    alt: string;
+  };
+  liveUrl?: string;
+  repoUrl?: string;
+}
+
+export interface CertificateItem {
+  slug: string;
+  title: string;
+  issuer: string;
+  date: string;
+  summary: string;
+  skills: string[];
+  credentialUrl?: string;
+  image: {
+    src: ImageMetadata;
+    alt: string;
+  };
 }
 
 export interface ExperienceItem {
@@ -85,7 +121,7 @@ export const portfolioData = {
   navLinks: [
     { label: "Home", href: "#top" },
     { label: "About", href: "#about" },
-    { label: "Articles", href: "#articles" },
+    { label: "Projects", href: withBase("/projects") },
     { label: "Testimonials", href: "#testimonials" },
     { label: "FAQ", href: "#faq" },
   ] satisfies NavLink[],
@@ -153,6 +189,174 @@ export const portfolioData = {
     ] satisfies FeaturedProject[],
   },
 
+  projects: {
+    title: "Projects",
+    description:
+      "Selected works across software engineering, project management, and cybersecurity.",
+    categories: [
+      {
+        id: "software-engineer" as ProjectCategory,
+        label: "Software Engineer",
+        description:
+          "Production web applications, type-safe APIs, and scalable front-end systems.",
+      },
+      {
+        id: "project-manager" as ProjectCategory,
+        label: "Project Manager",
+        description:
+          "Agile delivery, stakeholder alignment, and cross-functional product execution.",
+      },
+      {
+        id: "cybersecurity" as ProjectCategory,
+        label: "Cybersecurity",
+        description:
+          "Security audits, compliance readiness, and application hardening.",
+      },
+    ],
+    items: [
+      {
+        slug: "sakala-mrv",
+        title: "Sakala MRV",
+        tagline: "End-to-end type-safe full-stack architecture",
+        description:
+          "Designed and engineered a structured Measurement, Reporting, and Verification platform with strong type-safety from database schema to UI components.",
+        category: "software-engineer",
+        categoryLabel: "Software Engineer",
+        period: "2025",
+        tags: ["React", "TypeScript", "AdonisJS", "PostgreSQL"],
+        image: {
+          src: sakalaImg,
+          alt: "Sakala MRV software engineering project preview",
+        },
+      },
+      {
+        slug: "fuzzy-ahp-dss",
+        title: "Fuzzy AHP Decision System",
+        tagline: "Multi-criteria decision support web application",
+        description:
+          "Built an interactive decision-support platform implementing the Fuzzy Analytic Hierarchy Process for weighted criteria scoring and transparent ranking.",
+        category: "software-engineer",
+        categoryLabel: "Software Engineer",
+        period: "2025",
+        tags: ["Vue", "Laravel", "PostgreSQL", "Tailwind CSS"],
+        image: {
+          src: fahpImg,
+          alt: "Fuzzy AHP Decision System application preview",
+        },
+      },
+      {
+        slug: "personal-finance-tracker",
+        title: "Personal Finance Dashboard",
+        tagline: "Real-time budgeting and cash-flow analytics",
+        description:
+          "Developed a responsive finance workspace for tracking multi-category budgets, recurring transactions, and monthly cash-flow trends.",
+        category: "software-engineer",
+        categoryLabel: "Software Engineer",
+        period: "2024",
+        tags: ["Next.js", "Supabase", "TypeScript", "Tailwind CSS"],
+        image: {
+          src: financeImg,
+          alt: "Personal Finance Dashboard interface preview",
+        },
+      },
+      // {
+      //   slug: "eventspace-ticketing",
+      //   title: "Eventsp",
+      //   tagline: "Multi-tenant storefront & order management API",
+      //   description:
+      //     "Placeholder software engineering project showcasing modular domain services, real-time inventory updates, and role-based admin dashboards.",
+      //   category: "software-engineer",
+      //   categoryLabel: "Software Engineer",
+      //   period: "2024",
+      //   tags: ["Angular", "MongoDB", "Firebase", "Node.js"],
+      //   image: {
+      //     src: sakalaImg,
+      //     alt: "Modular Commerce Engine placeholder preview",
+      //   },
+      // },
+      {
+        slug: "eventspace-ticketing",
+        title: "EventSpace Ticketing",
+        tagline: "Agile, cross-functional roadmap & milestone launch",
+        description:
+          "Led product discovery, sprint ceremonies, and release milestones across engineering and design teams to ship a reliable event ticketing experience on schedule.",
+        category: "project-manager",
+        categoryLabel: "Project Manager",
+        period: "2026",
+        tags: ["Agile", "Scrum", "Roadmapping", "Release Management"],
+        image: {
+          src: pmImg,
+          alt: "EventSpace Ticketing project management preview",
+        },
+      },
+      {
+        slug: "iso-27001",
+        title: "Software ISO 27001 Audit",
+        tagline: "Automated hardening & vulnerability checks",
+        description:
+          "Performed application security reviews, access-control validation, and automated vulnerability scanning aligned with ISO/IEC 27001 security controls.",
+        category: "cybersecurity",
+        categoryLabel: "Cybersecurity",
+        period: "2025",
+        tags: ["ISO 27001", "OWASP", "AppSec", "Security Hardening"],
+        image: {
+          src: cyberImg,
+          alt: "Software ISO 27001 audit preview",
+        },
+      },
+    ] as ProjectItem[],
+  },
+
+  certificates: {
+    title: "Certificates",
+    description:
+      "Verified course of Vue framework. Learning fundamental behind the ultimate Vue.",
+    items: [
+      {
+        slug: "vue-certificate",
+        title: "Vue Certificate",
+        issuer: "Udemy",
+        date: "2025",
+        summary:
+          "Vue complete guide from options, to composition api. Using store like pinia, and vue router.",
+        skills: ["Vue", "Node.js", "Firebase"],
+        credentialUrl: "https://www.udemy.com/certificate/UC-b26dccd3-aa5e-4fe2-8edb-b4500aad09ea/",
+        image: {
+          src: vueCert,
+          alt: "Vue certificate",
+        },
+      },
+      {
+        slug: "react-certificate",
+        title: "React Certificate",
+        issuer: "Udemy",
+        date: "2025",
+        summary:
+          "React complete guide covering hooks, state management, routing, and modern component patterns.",
+        skills: ["React", "TypeScript", "Next.js"],
+        credentialUrl: "https://www.udemy.com/certificate/UC-02769f95-fed5-4898-9e35-68a37ead80b9",
+        image: {
+          src: reactCert,
+          alt: "React certificate",
+        },
+      },
+      {
+        slug: "ibm-certificate",
+        title: "IBM Certificate",
+        issuer: "IBM",
+        date: "2025",
+        summary:
+          "IBM certification intro for utilizing IBM Bob for software development workflows.",
+        skills: ["Cybersecurity", "Cloud", "Systems"],
+        credentialUrl: "#",
+        image: {
+          src: ibmCert,
+          alt: "IBM certificate",
+        },
+      },
+    ] as CertificateItem[],
+  },
+
   about: {
     title: "About Me",
     paragraphs: [
@@ -176,7 +380,7 @@ export const portfolioData = {
         period: "2025 - Present",
         role: "Software Engineer at",
         company: "Dassa Corp.",
-        url: "https://dassacorp.com/team/fathursyah-awandanu",
+        url: "https://www.sakala.cloud",
         accentColor: "#f43f5e",
       },
       {

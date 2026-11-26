@@ -3,10 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { portfolioData } from "@/data/portfolio";
-import { cn } from "@/lib/utils";
+import { cn, withBase } from "@/lib/utils";
 
-export function Navbar() {
-  const [activeHref, setActiveHref] = useState("#top");
+interface NavbarProps {
+  currentPath?: string;
+}
+
+export function Navbar({ currentPath = "/" }: NavbarProps) {
+  const isHome = currentPath === "/";
+  const [activeHref, setActiveHref] = useState(
+    isHome ? "#top" : withBase(currentPath)
+  );
   const [usesNativeScrollspy, setUsesNativeScrollspy] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const navListRef = useRef<HTMLUListElement>(null);
@@ -16,7 +23,11 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    const navLinks = portfolioData.navLinks;
+    if (!isHome) return;
+
+    const anchorLinks = portfolioData.navLinks.filter((link) =>
+      link.href.startsWith("#")
+    );
 
     if (CSS.supports("scroll-target-group: auto")) {
       setUsesNativeScrollspy(true);
@@ -41,7 +52,7 @@ export function Navbar() {
       };
     }
 
-    const sections = navLinks
+    const sections = anchorLinks
       .map((link) => document.querySelector<HTMLElement>(link.href))
       .filter((el): el is HTMLElement => el !== null);
 
@@ -64,12 +75,12 @@ export function Navbar() {
 
     const handleBoundaryScroll = () => {
       if (window.scrollY <= 16) {
-        setActiveHref(navLinks[0].href);
+        setActiveHref(anchorLinks[0].href);
       } else if (
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight - 16
       ) {
-        setActiveHref(navLinks[navLinks.length - 1].href);
+        setActiveHref(anchorLinks[anchorLinks.length - 1].href);
       }
     };
 
@@ -79,7 +90,7 @@ export function Navbar() {
       observer.disconnect();
       window.removeEventListener("scroll", handleBoundaryScroll);
     };
-  }, []);
+  }, [isHome]);
 
   const toggleTheme = () => {
     const nextIsDark = !isDark;
@@ -98,18 +109,35 @@ export function Navbar() {
         aria-label="Primary navigation"
         className="flex items-center gap-1 bg-background/80 dark:bg-muted/80 backdrop-blur-md rounded-full px-2 sm:px-3.5 py-1.5 border border-border/70 shadow-lg shadow-neutral-950/5"
       >
-        <ul ref={navListRef} className="nav-scrollspy flex items-center">
+        <ul
+          ref={navListRef}
+          className={cn("flex items-center", isHome && "nav-scrollspy")}
+        >
           {portfolioData.navLinks.map((link) => {
-            const isActive = activeHref === link.href;
+            const isAnchor = link.href.startsWith("#");
+            const resolvedHref =
+              !isHome && isAnchor ? withBase(`/${link.href}`) : link.href;
+            const isActive = isHome
+              ? activeHref === link.href
+              : link.href === withBase(currentPath);
+
             return (
               <li key={link.href}>
                 <a
-                  href={link.href}
-                  aria-current={isActive ? "true" : undefined}
-                  onClick={() => setActiveHref(link.href)}
+                  href={resolvedHref}
+                  aria-current={
+                    isActive ? (isHome ? "true" : "page") : undefined
+                  }
+                  onClick={() => {
+                    if (isHome && isAnchor) {
+                      setActiveHref(link.href);
+                    }
+                  }}
                   className={cn(
                     "inline-flex items-center rounded-full px-2.5 sm:px-3 py-1 text-xs sm:text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                    isActive && !usesNativeScrollspy && "target-current",
+                    isActive &&
+                      (!isHome || !usesNativeScrollspy) &&
+                      "target-current bg-accent/80",
                     isActive
                       ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground"
