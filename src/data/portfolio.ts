@@ -310,7 +310,7 @@ export const portfolioData = {
   certificates: {
     title: "Certificates",
     description:
-      "Verified course of Vue framework. Learning fundamental behind the ultimate Vue.",
+      "Verified course from software engineering, cybersecurity, and project manager related.",
     items: [
       {
         slug: "vue-certificate",
